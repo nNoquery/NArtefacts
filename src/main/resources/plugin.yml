@@ -1,0 +1,5 @@
+name: NArtefacts
+version: '${project.version}'
+main: ru.noquery.www.nartefacts.NArtefacts
+api-version: '1.20'
+author: 'Noquery'
