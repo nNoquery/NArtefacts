@@ -11,4 +11,6 @@ public interface LuckyWeapon {
     Random random = new Random();
     Map<PotionEffect, Integer> modifiersAttack = new HashMap<>();
 
+    void addModifierAttack();
+
 }

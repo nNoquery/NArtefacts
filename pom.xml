@@ -67,5 +67,12 @@
           <version>1.20-R0.1-SNAPSHOT</version>
           <scope>provided</scope>
       </dependency>
+
+      <dependency>
+          <groupId>diag.playmine</groupId>
+          <artifactId>StringHelper</artifactId>
+          <version>1.0.0</version>
+      </dependency>
+
   </dependencies>
 </project>

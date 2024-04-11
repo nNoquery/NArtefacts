@@ -1,22 +1,25 @@
 package ru.noquery.www.nartefacts.Base;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.persistence.PersistentDataType;
+import ru.noquery.www.nartefacts.NArtefacts;
 
 import java.util.List;
 
-public abstract class BaseWeapon {
+public abstract class BaseWeapon implements Listener {
 
     protected int damage;
     protected int durability;
     protected int statTrack;
     protected NamespacedKey key;
     protected ItemStack item;
+    protected List<Component> lore;
 
 
     public BaseWeapon(int damage, int durability, int statTrack, NamespacedKey key, Material material, Component name, List<Component> lore) {
@@ -24,12 +27,9 @@ public abstract class BaseWeapon {
         this.durability = durability;
         this.statTrack = statTrack;
         this.key = key;
+        this.lore = lore;
         buildItem(material, name, lore);
-    }
-
-
-    public void doDamage(@NotNull LivingEntity entity) {
-        entity.setHealth(entity.getHealth()-damage);
+        NArtefacts.instance.getServer().getPluginManager().registerEvents(this, NArtefacts.instance);
     }
 
     private void buildItem(Material material, Component name, List<? extends Component> lore){
@@ -37,7 +37,9 @@ public abstract class BaseWeapon {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.lore(lore);
         itemMeta.displayName(name);
+        itemMeta.getPersistentDataContainer().set(key, PersistentDataType.BOOLEAN, true);
         itemStack.setItemMeta(itemMeta);
+        itemStack.setDurability((short) durability);
         item = itemStack;
     }
 
@@ -65,7 +67,16 @@ public abstract class BaseWeapon {
     public void setStatTrack(int statTrack){
         this.statTrack = statTrack;
     }
+    public void updateKillCount(ItemStack item) {
+        String m =  ((TextComponent)lore.get(0)).content();
+        lore.set(0, Component.text(m.replace(statTrack-1+"", statTrack+"")));
+        ItemMeta itemMeta = item.getItemMeta();
+        itemMeta.lore(lore);
+        item.setItemMeta(itemMeta);
+
+    }
     public NamespacedKey getKey() {
        return key;
     }
+
 }

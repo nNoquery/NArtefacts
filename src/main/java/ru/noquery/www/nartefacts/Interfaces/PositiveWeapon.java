@@ -8,4 +8,6 @@ import java.util.List;
 public interface PositiveWeapon{
     List<PotionEffect> positiveEffects = new ArrayList<>();
 
+    void addPositiveEffects();
+
 }
